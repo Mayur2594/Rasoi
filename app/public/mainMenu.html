@@ -1,0 +1,95 @@
+<!-- 
+<script>
+	$(document).ready(function(){
+    $(".dropdown").hover(            
+        function() {
+            $('.dropdown-menu', this).not('.in .dropdown-menu').stop(true,true).slideDown("400");
+            $(this).toggleClass('open');        
+        },
+        function() {
+            $('.dropdown-menu', this).not('.in .dropdown-menu').stop(true,true).slideUp("400");
+            $(this).toggleClass('open');       
+        }
+    );
+});
+</script> -->
+
+
+<style>
+
+.dropdown
+{
+  cursor:pointer !important;
+}
+
+</style>
+
+
+<div class="row">
+  <nav class="navbar navbar-inverse bg-primary fixed-top">
+    <div class="navbar-header">
+    	<button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".js-navbar-collapse">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+		<a class="navbar-brand" style="margin-left:1rem !important;color:transparent;" href="#">Credit Society </a>
+	</div>
+	
+	<div class="collapse navbar-collapse js-navbar-collapse">
+		<ul class="nav navbar-nav">
+			<li><a href="#!Dashboard">Home</a></li>
+			<li class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown">Members
+				<span class="caret"></span></a>
+				<ul class="dropdown-menu">
+					<li><a href="#!MembersDetails">Member`s Details</a></li>
+					<li><a href="#!MembersAccounts">Member`s Accounts</a></li>
+				</ul>
+			</li>
+			<li class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown">Masters
+				<span class="caret"></span></a>
+				<ul class="dropdown-menu">
+				  <li><a href="#!AreaDetails">Areas</a></li>
+				  <li><a href="#!GroupDetails">Groups</a></li>
+				  <li><a href="#!EventsDetails">Events</a></li>
+				</ul>
+			</li>
+			<li class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown">Agents
+				<span class="caret"></span></a>
+				<ul class="dropdown-menu">
+				  <li><a href="#!AgentsDetails">Agent`s Details</a></li>
+				  <li><a href="#!CollectionLimit">Agent`s Collection Limit</a></li>
+				  <li><a href="#!CollectionList">Agent`s Collection</a></li>
+				</ul>
+			</li>
+			<li class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown">Office
+				<span class="caret"></span></a>
+				<ul class="dropdown-menu">
+				  <li><a href="#!EmployeeDetails">Employee`s/User`s Details</a></li>
+				  <li><a href="#!BranchsDetails">Branches</a></li>
+				  <li><a href="#!AccountTypes">Account Types</a></li>
+				  <li><a href="#!AccountPlans">Account Plans</a></li>
+				  <li><a href="#!TermsNConditions">Terms & Conditions</a></li>
+				</ul>
+			</li>
+			<li><a href="#!EMICalculator">EMI Calculator</a></li>
+		</ul>
+        <ul class="nav navbar-nav navbar-right" style="margin-right:1rem !important;">
+       <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">My account <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#!Profile">Profile</a></li>
+            <li><a href="#!Lock">Lock Screen</a></li>
+			<li class="divider"></li>
+            <li><a href="#!">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+	</div><!-- /.nav-collapse -->
+  </nav>
+</div>

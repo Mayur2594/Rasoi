@@ -1,0 +1,138 @@
+<div class="container-fluid" ng-controller="OfficeController">
+	<div class="row">
+		<div class="col-md-6 col-sm-6 col-xs-5  mt--1"><h3 class="h3-responsive">Branchs Details</h3></div>
+		<div class="col-md-3 col-sm-6 col-xs-7 pull-right">
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="Search" ng-model="search.values">
+			</div>
+		</div>
+	</div>
+
+
+	<div class="row">
+		<div class="col-md-2 col-sm-3 col-xs-3"><button class="btn btn-primary" data-toggle="modal" data-target="#ModalPopup">Add New</button></div>
+		<div class="col-md-2 col-xs-4 pull-right">
+							<button style='border:none;background:transparent;color:black;' ng-disabled='currentPage == 0' class='glyphicon glyphicon-chevron-left' ng-click='currentPage=currentPage-1'></button>
+													  <b>  {{currentPage+1}} / {{numberOfPages()}} </b>
+													  <input type='number' min='1' max='{{maxpage}}' ng-change='checkcurrpage(myValue)' style='width:35%' class="hidden-xs" ng-model='myValue'>
+														<button style='border:none;background:transparent;color:black' class='glyphicon glyphicon-chevron-right' ng-disabled='currentPage >= branchList.length/pageSize - 1' ng-click='currentPage=currentPage+1'></button>
+		</div>
+		
+			<div class="col-md-2 col-xs-4 pull-right"><select class="form-control" ng-model="pageSize" ng-options="obj.value as obj.name for obj in recordsdisplay">
+			<option value="" selected disabled>Record to display</option>
+		</select>
+		</div>
+	</div>
+	
+	<div class="loader"></div>
+	
+	<!-- Modal -->
+	<div class="modal fade" id="ModalPopup" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					 <h4 class="modal-title">Branch Details</h4> 
+				</div>
+				<div class="modal-body">
+					<form name="branchdetals">
+					<div class="col-md-12 col-sm-12">
+						<div class="form-group">
+							<label for="name">Name:</label>
+							<input type="text" class="form-control" id="name" placeholder="Name" ng-model="branchDetails[0].branchname">
+						</div>
+						</div>
+						<div class="col-md-12 col-sm-12">
+						<div class="form-group">
+							<label for="address">Address:</label>
+							<textarea class="form-control" id="address" placeholder="Address" ng-model="branchDetails[0].address"></textarea>
+						</div>
+						</div>
+						<legend>Contact Details</legend>
+						<div class="col-md-6 col-sm-6">
+							<div class="form-group">
+								<label for="contact1">Contact No.1:</label>
+								<input type="text" class="form-control" id="contact1" placeholder="Contact No.1" ng-model="branchDetails[0].contactdetails.contact1">
+							</div>
+						</div>
+						
+						<div class="col-md-6 col-sm-6">
+							<div class="form-group">
+								<label for="contact2">Contact No.2:</label>
+								<input type="text" class="form-control" id="contact2" placeholder="Contact No.1" ng-model="branchDetails[0].contactdetails.contact2">
+							</div>
+						</div>
+						
+						<div class="col-md-12 col-sm-12">
+							<div class="form-group">
+								<label for="email">Email:</label>
+								<input type="email" class="form-control" id="email" placeholder="Email" ng-model="branchDetails[0].contactdetails.email">
+							</div>
+						</div>
+						<legend>Manager Details</legend>
+							<div class="col-md-6 col-sm-6">
+							<div class="form-group">
+								<label for="mname">Name:</label>
+								<input type="text" class="form-control" id="mname" placeholder="Name" ng-model="branchDetails[0].managerdetails.name">
+							</div>
+						</div>
+						
+						<div class="col-md-6 col-sm-6">
+							<div class="form-group">
+								<label for="memail">Email:</label>
+								<input type="email" class="form-control" id="memail" placeholder="Email" ng-model="branchDetails[0].managerdetails.email">
+							</div>
+						</div>
+						
+						<div class="col-md-6 col-sm-6">
+							<div class="form-group">
+								<label for="mobile1">Contact No.1:</label>
+								<input type="text" class="form-control" id="mobile1" placeholder="Contact No.1" ng-model="branchDetails[0].managerdetails.mobile1">
+							</div>
+						</div>
+						
+						<div class="col-md-6 col-sm-6">
+							<div class="form-group">
+								<label for="mobile2">Contact No.2:</label>
+								<input type="text" class="form-control" id="mobile2" placeholder="Contact No.1" ng-model="branchDetails[0].managerdetails.mobile2">
+							</div>
+						</div>
+						<div class="mt-6"></div>
+					</form>
+				</div>
+				<div class="modal-footer mt-5">
+					<button type="button" class="btn btn-primary" ng-click="SaveBranchDetails()" data-dismiss="modal">Submit</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+			
+	
+	
+		<div class="row mt-1">
+		<div class="table-responsive" ng-init="ListBranchs()">
+			<table class="table table-bordered table-striped">
+				<thead>
+						<th>#</th>
+					<th>Branch</th>
+					<th>Contact Details</th>
+					<th>Manager</th>
+					<th>Created By</th>
+					<th>Action</th>
+				</thead>
+				<tbody>
+					<tr ng-repeat="data in branchList | filter:search.values| startFrom:currentPage*pageSize | limitTo:pageSize ">
+						<td>{{$index +1}}</td>
+						<td>{{data.branchname}}</td>
+						<td>{{data.contactdetails.contact1}} <span ng-if="(data.contactdetails.contact2 != '' || data.contactdetails.contact2) != null">&nbsp;/&nbsp;</span>{{data.contactdetails.contact2}}</td>
+						<td>{{data.managerdetails.name}}</td>
+						<td>{{data.createdby}}</td>
+						<td class="text-center"><button class="btn btn-warning" ng-click="getBranchDetails(data._id)" data-toggle="modal" data-target="#ModalPopup">Edit</button> | <button class="btn btn-danger" ng-click="DeleteBranch(data._id)">Delete</button></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		</div>
+</div>

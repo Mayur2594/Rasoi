@@ -1,0 +1,54 @@
+<div class="container-fluid" ng-controller="EmployeesController">
+
+	<div class="row">
+		<div class="col-md-6 col-sm-6 col-xs-5  mt--1"><h3 class="h3-responsive">Employee`s Details</h3></div>
+		<div class="col-md-3 col-sm-6 col-xs-7 pull-right">
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="Search" ng-model="search.values">
+			</div>
+		</div>
+	</div>
+
+	<div class="row" ng-init="ListEmployees()">
+		<div class="col-md-2 col-sm-3 col-xs-2"><button class="btn btn-primary" ng-click="RedirectToForm('/EmployeeForm')">Add New</button></div>
+		<div class="col-md-2 col-xs-4 pull-right">
+							<button style='border:none;background:transparent;color:black;' ng-disabled='currentPage == 0' class='glyphicon glyphicon-chevron-left' ng-click='currentPage=currentPage-1'></button>
+													  <b>  {{currentPage+1}} / {{numberOfPages()}} </b>
+													  <input type='number' min='1' max='{{maxpage}}' ng-change='checkcurrpage(myValue)' style='width:35%' class="hidden-xs" ng-model='myValue'>
+														<button style='border:none;background:transparent;color:black' class='glyphicon glyphicon-chevron-right' ng-disabled='currentPage >= EmployeesList.length/pageSize - 1' ng-click='currentPage=currentPage+1'></button>
+		</div>
+		
+			<div class="col-md-2 col-xs-4 pull-right"><select class="form-control" ng-model="pageSize" ng-options="obj.value as obj.name for obj in recordsdisplay">
+			<option value="" selected disabled>Record to display</option>
+		</select>
+		</div>
+	</div>
+	<div class="loader"></div>
+		<div class="row mt-1">
+		<div class="table-responsive">
+			<table class="table table-bordered table-striped">
+				<thead>
+					<th>#</th>
+					<th>Name</th>
+					<th>Mobile No.</th>
+					<th>Branch</th>
+					<th>DOJ</th>
+					<th>Role</th>
+					<th>Action</th>
+				</thead>
+				
+				<tbody>
+					<tr ng-repeat="data in EmployeesList | filter:search.values | startFrom:currentPage*pageSize | limitTo:pageSize">
+						<td>{{$index + 1}}</td>
+						<td>{{data.firstname}} {{data.midname}} {{data.lastname}}</td>
+						<td>{{data.contactdetails.mobile1}}</td>
+						<td>{{data.branch.branchname}}</td>
+						<td>{{data.doj | date:'dd/MM/yyyy'}}</td>
+						<td>{{data.role}}</td>
+						<td class="text-center"><button class="btn btn-warning" ng-click="RedirectToEmployeeform(data._id)">Edit</button> | <button class="btn btn-danger" ng-click="DeleteEmployeesDetails(data._id)">Delete</button></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		</div>
+</div>

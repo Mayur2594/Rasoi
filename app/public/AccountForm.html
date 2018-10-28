@@ -1,0 +1,348 @@
+<script>
+function readURL(input) {
+        if (input.files && input.files[0]) {
+		angular.element(document.getElementById('memberform')).scope().PassFileValue(input.files);
+        }
+    }
+</script>
+<div class="container" id="memberform" ng-controller="MembersController" >
+
+
+
+<form name="memdetails" ng-init="GetMembersDetails()">
+	<div class="col-md-12 col-xs-12"><legend>Basic Details<h4 class="pull-right text-danger">{{errormsg}}</h4></span></legend></div>
+	<div class="col-md-1 col-xs-12 pull-left">
+		<div class="row">
+				 <img id="imgpanel" src="uploads/{{memberAccounts[0].documentsdetails.pic}}"  height="200" width="150" />
+				<!-- <button class="imgbtn" ng-click="clear()">Clear</button> -->
+		</div>
+	</div>
+	<div class="col-md-11 col-xs-12">
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="firstname">First Name:</label>
+			<input type="text" class="form-control" id="firstname" placeholder="First Name" ng-model="memberAccounts[0].firstname" required >
+		</div>
+	</div>
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="midname">Middle Name:</label>
+			<input type="text" class="form-control" id="midname" placeholder="Middle Name" ng-model="memberAccounts[0].midname" required>
+		</div>
+	</div>
+	
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="lastname">Last Name:</label>
+			<input type="text" class="form-control" id="lastname" placeholder="Last Name" ng-model="memberAccounts[0].lastname" required>
+		</div>
+	</div>
+	
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="gender">Gender:</label>
+			<select class="form-control" id="gender" ng-model="memberAccounts[0].gander" ng-options="obj for obj in ['Male','Female','Other']" required>
+				<option value="" selected disabled >Gender</option>
+			</select>
+		</div>
+	</div>
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="dob">DOB:</label>
+			<input type="date" class="form-control" id="dob"  ng-model="memberAccounts[0].dob" required>
+		</div>
+	</div>
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="mobile1">Mobile No.:</label>
+			<input type="text" class="form-control" id="mobile1" placeholder="Mobile No."  ng-model="memberAccounts[0].contactdetails.mobile1" ng-blur="VerifyrequiredFieldsInMembers(memberAccounts[0].contactdetails.mobile1,'Mobile')" required>
+		</div>
+	</div>
+	
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="mobile2">Alt. Mobile No.:</label>
+			<input type="text" class="form-control" id="mobile2"  placeholder="Alt. Mobile No."  ng-model="memberAccounts[0].contactdetails.mobile2" required>
+		</div>
+	</div>
+	
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="email">Email:</label>
+			<input type="email" class="form-control" id="email"  placeholder="Email" ng-model="memberAccounts[0].contactdetails.email" ng-blur="VerifyrequiredFieldsInMembers(memberAccounts[0].contactdetails.email,'Email')" required>
+		</div>
+	</div>
+	</div>
+	<div class="col-md-12 col-xs-12"><legend>Address Details</legend></div>
+	<div class="col-md-4 col-xs-12">
+		<div class="form-group">
+			<label for="adln1">Line 1:</label>
+			<input type="text" class="form-control" id="adln1" placeholder="Line 1" ng-model="memberAccounts[0].address.line1" required>
+		</div>
+	</div>
+	<div class="col-md-4 col-xs-12">
+		<div class="form-group">
+			<label for="adln2">Line 2:</label>
+			<input type="text" class="form-control" id="adln2" placeholder="Line 2" ng-model="memberAccounts[0].address.line2" required>
+		</div>
+	</div>
+	<div class="col-md-4 col-xs-12">
+		<div class="form-group">
+			<label for="adln3">Line 3:</label>
+			<input type="text" class="form-control" id="adln3" placeholder="Line 3" ng-model="memberAccounts[0].address.line3" required>
+		</div>
+	</div>
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="city">City:</label>
+			<input type="text" class="form-control" id="city" placeholder="City" ng-model="memberAccounts[0].address.city" required>
+		</div>
+	</div>
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="state">State:</label>
+			<input type="text" class="form-control" id="state" placeholder="State" ng-model="memberAccounts[0].address.state" required>
+		</div>
+	</div>
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="zip">Pincode:</label>
+			<input type="text" class="form-control" id="zip" placeholder="Pincode" ng-model="memberAccounts[0].address.zip" required>
+		</div>
+	</div>
+	
+	<div class="col-md-12 col-xs-12"><legend>Alternate Address Details</legend></div>
+	
+	<div class="col-md-4 col-xs-12">
+		<div class="form-group">
+			<label for="adln1">Line 1:</label>
+			<input type="text" class="form-control" id="adln1" placeholder="Line 1" ng-model="memberAccounts[0].altaddress.line1" required>
+		</div>
+	</div>
+	<div class="col-md-4 col-xs-12">
+		<div class="form-group">
+			<label for="adln2">Line 2:</label>
+			<input type="text" class="form-control" id="adln2" placeholder="Line 2" ng-model="memberAccounts[0].altaddress.line2" required>
+		</div>
+	</div>
+	<div class="col-md-4 col-xs-12">
+		<div class="form-group">
+			<label for="adln3">Line 3:</label>
+			<input type="text" class="form-control" id="adln3" placeholder="Line 3" ng-model="memberAccounts[0].altaddress.line3" required>
+		</div>
+	</div>
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="city">City:</label>
+			<input type="text" class="form-control" id="city" placeholder="City" ng-model="memberAccounts[0].altaddress.city" required>
+		</div>
+	</div>
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="state">State:</label>
+			<input type="text" class="form-control" id="state" placeholder="State" ng-model="memberAccounts[0].altaddress.state" required>
+		</div>
+	</div>
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="zip">Pincode:</label>
+			<input type="text" class="form-control" id="zip" placeholder="Pincode" ng-model="memberAccounts[0].altaddress.zip" required>
+		</div>
+	</div>
+	
+		<div class="col-md-12 col-xs-12"><legend>Document Details<h4 class="pull-right text-danger">{{errormsg}}</h4></span></legend></div>
+		
+		<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="aadhaar">Aadhaar card No.:</label>
+			<input type="text" class="form-control" id="aadhaar" placeholder="Aadhaar card No." ng-model="memberAccounts[0].documentsdetails.aadhaar" ng-blur="VerifyrequiredFieldsInMembers(memberAccounts[0].documentsdetails.aadhaar,'Aadhaar card No')" required>
+		</div>
+	</div>
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="pan">Pan No.:</label>
+			<input type="text" class="form-control" id="pan" placeholder="Pan No." ng-model="memberAccounts[0].documentsdetails.pan" ng-blur="VerifyrequiredFieldsInMembers(memberAccounts[0].documentsdetails.pan,'Pan No')" required>
+		</div>
+	</div>
+	<!-- <div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="photo">Photo:</label>
+			<button class="button btn btn-default" id="memberpic" type="file" ngf-select ng-model="file" name="file" ngf-pattern="'image/*'"
+					ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="100" 
+					ngf-resize="{width: 100, height: 100}" ng-change="PassFileValue()">Choose file</button>
+		</div>
+	</div> -->
+
+	<div class="col-md-12 col-xs-12"><legend>Account Details</legend></div>
+	
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="referred">Referred By:</label>
+			<input type="text" class="form-control" id="referred" placeholder="Referred By" ng-model="memberAccounts[0].refredby" >
+		</div>
+	</div>
+	<div ng-controller="MastersController" >
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group" ng-init="ListBranchs()">
+			<label for="branch">Branch:</label>
+			<input type="text" class="form-control" id="branch" placeholder="Branch" ng-model="memberAccounts[0].branch" uib-typeahead="obj as obj.branchname for obj in branchList" typeahead-on-select="ListAreasOnBranch($item._id)" required>
+		</div>
+	</div>
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="area">Area:</label>
+			<input type="text" class="form-control" id="area" placeholder="Area" ng-model="memberAccounts[0].areaid" uib-typeahead="obj as obj.areaname for obj in ListOfAreas" typeahead-on-select="ListGroupsOnArea($item._id)" required>
+		</div>
+	</div>
+	
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="group">Group:</label>
+			<input type="text" class="form-control" id="group" placeholder="Group" ng-model="memberAccounts[0].group" uib-typeahead="obj as obj.groupname for obj in ListOfGroups" required>
+		</div>
+	</div>
+	</div>
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="depositeamt">Deposit Amount:</label>
+			<input type="text" class="form-control" id="depositeamt" placeholder="Deposit Amount" ng-model="memberAccounts[0].depositeamount" required>
+		</div>
+	</div>
+	
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="strtdate">Starting Date:</label>
+			<input type="date" class="form-control" id="strtdate"  ng-model="memberAccounts[0].startingdate" required>
+		</div>
+	</div>
+	<div class="col-md-12 col-xs-12" ng-controller="OfficeController">
+	<div class="col-md-3 col-xs-12" >
+		<div class="form-group" ng-init="ListaccountPlans();ListAccounttypes();">
+			<label for="strtdate">Account Plan:</label>
+			<select class="form-control" ng-model="memberAccounts[0].planid" ng-options="obj._id as obj.name for obj in ACPlanList" ng-change="getAccountPlansDetails(memberAccounts[0].planid)">
+				<option value="" selected disabled>Select Account Plan</option>
+			</select>
+		</div>
+	</div>
+	
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="strtdate">Account Type:</label>
+			<select class="form-control" ng-model="memberAccounts[0].accounttypeid" ng-options="obj._id as obj.accounttype for obj in ACTypesList" ng-change="getAccounttypesDetails(memberAccounts[0].accounttypeid)">
+				<option value="" selected disabled>Select Account Type</option>
+			</select>
+		</div>
+	</div>
+	
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="strtdate">Interest Rate:</label>
+			<input type="text" class="form-control" ng-model="memberAccounts[0].interestrate" placeholder="Interest Rate"/>
+		</div>
+	</div>
+	
+	<div class="col-md-3 col-xs-12" ng-if="accountPlans[0].actypeid.installments === 'No'">
+		<div class="form-group">
+			<label for="strtdate">Invested Amount:</label>
+			<input type="text" class="form-control" ng-model="memberAccounts[0].investedamount" placeholder="Invested Amount"/>
+		</div>
+	</div>
+	
+	<div class="col-md-3 col-xs-12" ng-if="accountPlans[0].actypeid.installments === 'Yes'">
+		<div class="form-group">
+			<label for="strtdate">Loan Amount:</label>
+			<input type="text" class="form-control" ng-model="memberAccounts[0].loanamount" placeholder="Loan Amount"/>
+		</div>
+	</div>
+	
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="strtdate">Tenure:</label>
+			<input type="text" class="form-control" ng-model="memberAccounts[0].tenure" placeholder="Tenure"/>
+		</div>
+	</div>
+	
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="strtdate">Tenure Type:</label>
+			<select class="form-control" ng-model="memberAccounts[0].tenuretype" ng-options="obj for obj in ['Days','Months']">
+			<option value="" selected disabled>Select Tenure Type</option>
+			</select>
+		</div>
+	</div>
+	
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="strtdate">Frequency:</label>
+			<select class="form-control" ng-model="memberAccounts[0].frequency" ng-options="obj for obj in ['Daily','Monthly']">
+			<option value="" selected disabled>Select Frequency</option>
+			</select>
+		</div>
+	</div>
+	
+	<div class="col-md-3 col-xs-12" ng-if="accountPlans[0].actypeid.installments === 'No'">
+		<div class="form-group">
+			<label for="strtdate">Net Amount:</label>
+			<input type="text" class="form-control" ng-model="memberAccounts[0].netamount" placeholder="Net Amount"/>
+		</div>
+	</div>
+	
+	<div class="col-md-3 col-xs-12" ng-if="accountPlans[0].actypeid.installments === 'Yes'">
+		<div class="form-group">
+			<label for="emi">EMI:</label>
+			<input type="text" id="emi" class="form-control" ng-model="memberAccounts[0].emi" placeholder="EMI"/>
+		</div>
+	</div>
+	
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="strtdate">Starting Date:</label>
+			<input type="date" id="strtdate" class="form-control" ng-model="memberAccounts[0].startingdate" ng-change="GetExpiryDate()"/>
+		</div>
+	</div>
+	
+	<div class="col-md-3 col-xs-12">
+		<div class="form-group">
+			<label for="exptdate">Expiry Date:</label>
+			<input type="date" id="exptdate" class="form-control" ng-model="memberAccounts[0].expirydate"/>
+		</div>
+	</div>
+	
+	<div class="col-md-12 col-xs-12 col-sm-12"  ng-if="accountPlans[0].actypeid.guarantor === 'Yes'">
+		<div class="table-responsive">
+			<table class="table table-striped" ng-init="ListGuarantors()">
+				<thead>
+					<th>#</th>
+					<th>Member</th>
+					<th>Deposited Amount</th>
+					<th>Group - Area</th>
+					<th>Branch</th>
+					<th>Action</th>
+				</thead>
+				<tbody>
+					<tr ng-repeat="obj in memberAccounts[0].gourentorsdetails">
+						<td>{{$index +1}}</td>
+						<td><input type="text" class="form-control" placeholder="Search Member" ng-model="obj.gaumembername" uib-typeahead="obj as obj.firstname+' '+obj.midname+' '+obj.lastname for obj in guaMembersList" typeahead-on-select="ListAnotherGuarantor(memberAccounts[0].gourentorsdetails)"/></td>
+						<td class="text-center">{{(obj.gaumembername.depositeamount | number:2) || "0.00"}}</td>
+						<td  class="text-left">{{obj.gaumembername.group.groupname}} - {{obj.gaumembername.areaid.areaname}}</td>
+						<td  class="text-left">{{obj.gaumembername.branch.branchname}}</td>
+						<td  class="text-center"><button class="btn btn-primary" ng-click="Clearfield($index)">Clear</button></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	
+	</div>
+	
+  <div class="col-ms-12 col-xs-12 text-center" ng-controller="OfficeController">
+	
+	<br>
+	<br>
+	<button class="btn btn-warning" ng-click="RedirectToForm('/MembersDetails')">Cancel</button>&nbsp;&nbsp;<button id="sbmt" class="btn btn-primary" ng-click="SaveMembersACDetails(memberAccounts)">Submit</button>
+	<br>
+	<br>
+	</div>
+	
+</form>
+</div>

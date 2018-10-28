@@ -1,0 +1,58 @@
+<div class="container-fluid" ng-controller="MembersController">
+	<div class="row">
+		<div class="col-md-6 col-sm-6 col-xs-6  mt--1"><h3 class="h3-responsive">Account`s Details</h3></div>
+		<div class="col-md-3 col-sm-6 col-xs-6 pull-right">
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="Search">
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-2 col-sm-3 col-xs-3"><button class="btn btn-primary" ng-click="RedirectToForm('/MemberForm')">Add New</button></div>
+		
+		<div class="col-md-2 col-xs-4 pull-right">
+							<button style='border:none;background:transparent;color:black;' ng-disabled='currentPage == 0' class='glyphicon glyphicon-chevron-left' ng-click='currentPage=currentPage-1'></button>
+													  <b>  {{currentPage+1}} / {{numberOfPages()}} </b>
+													  <input type='number' min='1' max='{{maxpage}}' ng-change='checkcurrpage(myValue)' style='width:35%' class="hidden-xs" ng-model='myValue'>
+														<button style='border:none;background:transparent;color:black' class='glyphicon glyphicon-chevron-right' ng-disabled='currentPage >= accountsList.length/pageSize - 1' ng-click='currentPage=currentPage+1'></button>
+		</div>
+		
+			<div class="col-md-2 col-xs-4 pull-right"><select class="form-control" ng-model="pageSize" ng-options="obj.value as obj.name for obj in recordsdisplay">
+			<option value="" selected disabled>Record to display</option>
+		</select>
+		</div>
+		
+	</div>
+	<div class="loader"></div>
+		<div class="row mt-1">
+		<div class="table-responsive" ng-init="ListMembersAccounts()">
+			<table class="table table-bordered table-striped">
+				<thead>
+					<th>#</th>
+					<th>A/C No.</th>
+					<th>Member</th>
+					<th>A/C Type</th>
+					<th>A/C Plan</th>
+					<th>Interest Rate(%)</th>
+					<th>Amount</th>
+					<th>Branch</th>
+					<th>Action</th>
+				</thead>
+				<tbody>
+					<tr ng-repeat="data in accountsList | filter:search.values | startFrom:currentPage*pageSize | limitTo:pageSize">
+						<td>{{$index + 1}}</td>
+						<td>{{data._id}}</td>
+						<td>{{data.memberid[0].firstname}} {{data.memberid[0].midname}} {{data.memberid[0].lastname}}</td>
+						<td>{{data.accounttypeid[0].accounttype}}</td>
+						<td>{{data.planid[0].name}}</td>
+						<td>{{data.interestrate}}</td>
+						<td class="text-right">{{(data.loanamount |number:2) || (data.netamount |number:2) || "0.00"}}</td>
+						<td>{{data.branchid[0].branchname}}</td>
+						<td class="text-center"><button class="btn btn-warning" ng-click="RedirectTomembersform('/MemberForm/',data._id)">Edit</button> | <button class="btn btn-danger" ng-click="DeleteMember(data._id)">Delete</button> | <button class="btn btn-primary" ng-click="getMembersAccounts(data._id)" data-toggle="modal" data-target="#AccountsDetails">Accounts</button></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		</div>
+
+</div>

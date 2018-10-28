@@ -1,0 +1,109 @@
+<div class="container-fluid" ng-controller="MembersController">
+	<div class="row">
+		<div class="col-md-6 col-sm-6 col-xs-6  mt--1"><h3 class="h3-responsive">Members`s Details</h3></div>
+		<div class="col-md-3 col-sm-6 col-xs-6 pull-right">
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="Search">
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-2 col-sm-3 col-xs-3"><button class="btn btn-primary" ng-click="RedirectToForm('/MemberForm')">Add New</button></div>
+		
+		<div class="col-md-2 col-xs-4 pull-right">
+							<button style='border:none;background:transparent;color:black;' ng-disabled='currentPage == 0' class='glyphicon glyphicon-chevron-left' ng-click='currentPage=currentPage-1'></button>
+													  <b>  {{currentPage+1}} / {{numberOfPages()}} </b>
+													  <input type='number' min='1' max='{{maxpage}}' ng-change='checkcurrpage(myValue)' style='width:35%' class="hidden-xs" ng-model='myValue'>
+														<button style='border:none;background:transparent;color:black' class='glyphicon glyphicon-chevron-right' ng-disabled='currentPage >= membersList.length/pageSize - 1' ng-click='currentPage=currentPage+1'></button>
+		</div>
+		
+			<div class="col-md-2 col-xs-4 pull-right"><select class="form-control" ng-model="pageSize" ng-options="obj.value as obj.name for obj in recordsdisplay">
+			<option value="" selected disabled>Record to display</option>
+		</select>
+		</div>
+		
+	</div>
+	<div class="loader"></div>
+		<div class="row mt-1">
+		<div class="table-responsive" ng-init="ListMembers()">
+			<table class="table table-bordered table-striped">
+				<thead>
+					<th>#</th>
+					<th>Member</th>
+					<th>Mobile No.</th>
+					<th>Branch</th>
+					<th>Aadhaar No.</th>
+					<th>Deposited Amount</th>
+					<th>Action</th>
+				</thead>
+				<tbody>
+					<tr ng-repeat="data in membersList | filter:search.values | startFrom:currentPage*pageSize | limitTo:pageSize">
+						<td>{{$index + 1}}</td>
+						<td>{{data.firstname}} {{data.midname}} {{data.lastname}}</td>
+						<td>{{data.contactdetails.mobile1}}</td>
+						<td>{{data.branch.branchname}}</td>
+						<td>{{data.documentsdetails.aadhaar}}</td>
+						<td>{{data.depositeamount}}</td>
+						<td class="text-center"><button class="btn btn-warning" ng-click="RedirectTomembersform('/MemberForm/',data._id)">Edit</button> | <button class="btn btn-danger" ng-click="DeleteMember(data._id)">Delete</button> | <button class="btn btn-primary" ng-click="getMembersAccounts(data._id)" data-toggle="modal" data-target="#AccountsDetails">Accounts</button></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		</div>
+		
+		
+		
+					<!-- Modal -->
+					<div id="AccountsDetails" class="modal fade" role="dialog">
+					  <div class="modal-dialog">
+
+						<!-- Modal content-->
+						<div class="modal-content">
+						  <div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<!-- <h4 class="modal-title">Accounts Details</h4> -->
+						  </div>
+						  <div class="modal-body">
+							<div class="row" ng-if="membersACDetails.length <= 0">
+								<div class="col-md-12 col-xs-12 col-sm-12">
+									<div class="alert alert-danger text-center">
+										<strong>No record found!</strong>
+									</div>
+								</div>
+							</div>
+							
+							<div class="row" ng-if="membersACDetails.length > 0">
+									<div class="table-responsive">
+										<table class="table table-striped table-hover">
+											<thead>
+												<th>#</th>
+												<th>A/C No.</th>
+												<th>A/C Type</th>
+												<th>Interest Rate (%)</th>
+												<th>Amount</th>
+											</thead>
+											<tbody>
+												<tr ng-repeat="data in membersACDetails">
+													<td>{{$index +1}}</td>
+													<td>{{data._id}}</td>
+													<td>{{data.accounttypeid[0].accounttype}}</td>
+													<td>{{data.interestrate}}</td>
+													<td>{{(data.netamount | number:2) || (data.loanamount | number:2) || "0.00"}}</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+							</div>
+						  </div>
+						  <div class="modal-footer">
+							<button type="button" class="btn btn-primary" ng-click="RedirectTomembersACform('/AccountForm',selectedmemberid)"  >New Account</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						  </div>
+						</div>
+
+					  </div>
+					</div>
+		
+		
+		
+</div>

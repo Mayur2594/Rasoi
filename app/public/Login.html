@@ -1,0 +1,162 @@
+<style>
+	#mainMenu
+	{
+	   visibility : hidden !important;
+	}
+</style>
+
+<div class="container-fluid" ng-controller="LoginController">
+	<div class="row mt-3">
+			
+	<div class="col-md-6 col-xs-12 col-sm-12 col-md-offset-3 mt-5 my-5 pt-4 py-4">
+		<div class="flip-box">
+		<div class="flip-box-inner" id="flippanel">
+		<div class="flip-box-front">
+		<div class="card panel-success">
+		  <div class="panel-heading text-center"><h4>Start your session </h4></div>
+		  <div class="panel-body">
+				<form class="form-horizontal" ng-submit="authUser()" id="psfld">
+				
+				  <div class="form-group mt-5">
+					<label class="col-sm-2 control-label">Username:</label>
+					<div class="col-sm-10">
+					  <input class="form-control" id="username" ng-model="userDetails.username" type="text" placeholder="Username">
+					</div>
+				  </div>
+				  
+				  <div class="form-group mt-5">
+					<label class="col-sm-2 control-label">Password:</label>
+					<div class="col-sm-10">
+					 <div class="input-group">
+					  <input id="password" type="password" class="form-control" ng-model="userDetails.password" name="password" placeholder="Password">
+					   <span class="input-group-addon" ng-click="showHidePassword('password')"><i class="glyphicon glyphicon-eye-open" id="togglcls"></i></span>
+					</div>
+					</div>
+				  </div>
+				  
+				  <div class="form-group text-center mt-5">
+					<button type="submit" class="btn btn-success">Login</button>
+				  </div>
+				  
+				  <div class="col-md-8 pull-left text-right text-danger">{{errormsg}}</div>
+				  <div class="col-md-4 pull-right text-right">
+					<a  ng-click="forgotpasswordWindow(180)">Forgot password?</a>
+				  </div>
+				  
+				</form>
+		  </div>
+		  </div>
+		  </div>
+		  <div class="flip-box-back">
+			  <div class="card panel-warning">
+		  <div class="panel-heading text-center"><h4>Forgot Password?</h4></div>
+		  <div class="panel-body">
+				<form class="form-horizontal">
+				
+				  <div class="form-group mt-5">
+					<label class="col-sm-2 control-label">Username:</label>
+					<div class="col-sm-10">
+					  <input class="form-control" id="username" ng-model="user.username" type="text" placeholder="Username">
+					</div>
+				  </div>
+
+				  <div class="form-group mt-5">
+					<label class="col-sm-2 control-label">Email:</label>
+					<div class="col-sm-10">
+					  <input class="form-control" id="email" type="email" ng-model="user.email" placeholder="Email">
+					</div>
+				  </div>
+				  <div class="form-group text-center mt-5">
+					<button type="button" ng-click="forgotpasswordWindow(360)" class="btn btn-warning">Cancel</button>
+					&nbsp;<button type="button" class="btn btn-success" ng-click="ForgotPassword()">Submit</button>
+				  </div>
+				  <div class="form-group text-center mt-5">
+					
+				  </div>
+				  
+				</form>
+		  </div>
+		  </div>
+			</div>
+		</div>
+		</div>
+    </div>
+	
+	
+		<div class="modal fade" id="myModallOTP" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				  <div class="modal-dialog" role="document">
+					<div class="modal-content">
+					  <div class="modal-header">
+						<!-- <h3 class="modal-title" id="exampleModalLabel">{{message}}</h3> -->
+						<!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						  <span aria-hidden="true">&times;</span>
+						</button> -->
+					  </div>
+					  <div class="modal-body">
+						<form>
+							<div class="row">
+								<div class="col-md-2 col-xs-2 col-sm-2" ng-repeat="obj in arrayObj"><input type="text" class="form-control text-center text-bold" id="otp{{$index}}" ng-model="obj.otp" ng-keypress="SetFocus($index + 1)" maxlength="1" custom-autofocus="$index == focusIndex" /></div>
+							</div>
+						</form>
+						<br>
+						<br>
+					  </div>
+					  <div class="modal-footer">
+						<button ng-if="showbtn" type="button" ng-disabled="time > 0" class="btn btn-secondary" ng-click="ForgotPassword()"><span ng-if="time != 0">{{time}}</span><span ng-if="time == 0">Resend OTP</span></button>
+						<button type="button" class="btn btn-primary" ng-click="SubmitOtpAnResetpassword()">Submit</button>
+					  </div>
+					</div>
+				  </div>
+				</div>
+				
+				
+				
+		<div class="modal fade" id="myModallNewPassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				  <div class="modal-dialog" role="document">
+					<div class="modal-content">
+					  <div class="modal-header">
+						<!-- <h3 class="modal-title" id="exampleModalLabel">{{message}}</h3> -->
+						<!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						  <span aria-hidden="true">&times;</span>
+						</button> -->
+					  </div>
+					  <div class="modal-body">
+						<form class="form-horizontal" name="resetpassword">
+							<div class="form-group mt-5">
+								<label class="col-sm-4 control-label">New Password:</label>
+								<div class="col-sm-8">
+								 <div class="input-group">
+								  <input id="nwpassword" type="password" class="form-control" ng-model="usersPassworddata.password" name="password" placeholder="New Password" required>
+								   <span class="input-group-addon" ng-click="showHidePassword('nwpassword')"><i class="glyphicon glyphicon-eye-open" id="togglcls"></i></span>
+								</div>
+								</div>
+							  </div>
+							  
+							  <div class="form-group mt-5">
+								<label class="col-sm-4 control-label">Confirm Password:</label>
+								<div class="col-sm-8">
+								 <div class="input-group">
+								  <input id="cnfpassword" type="password" class="form-control" ng-model="usersPassworddata.confirmpassword" name="password" ng-focus="psmtch = true" placeholder="Confirm Password" required >
+								   <span class="input-group-addon" ng-click="showHidePassword('cnfpassword')"><i class="glyphicon glyphicon-eye-open" id="togglcls"></i></span>
+								</div>
+								</div>
+							  </div>
+							  <div class="form-group text-center" ng-if="psmtch && usersPassworddata.confirmpassword != usersPassworddata.password">
+									<span class="text-danger">Password Does not match.</span>
+							  </div>
+						</form>
+						<br>
+						<br>
+					  </div>
+					  <div class="modal-footer">
+						<button type="button" class="btn btn-warning" ng-click="usersPassworddata = null;" data-dismiss="modal" >Cancel</button>
+						<button type="button" class="btn btn-primary" ng-disabled="resetpassword.$invalid" ng-click="ResetPassword()">Submit</button>
+					  </div>
+					</div>
+				  </div>
+				</div>
+	
+	
+	
+	</div>
+</div>

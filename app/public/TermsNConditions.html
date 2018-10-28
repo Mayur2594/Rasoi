@@ -1,0 +1,103 @@
+<div class="container-fluid" ng-controller="MastersController">
+	<div class="row">
+		<div class="col-md-6 col-sm-6 col-xs-5  mt--1"><h3 class="h3-responsive">Terms & Conditions</h3></div>
+		<div class="col-md-3 col-sm-6 col-xs-7 pull-right">
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="Search" ng-model="search.values">
+			</div>
+		</div>
+	</div>
+
+
+	<div class="row">
+		<div class="col-md-2 col-sm-3 col-xs-3"><button class="btn btn-primary" data-toggle="modal" data-target="#ModalPopup">Add New</button></div>
+		<div class="col-md-2 col-xs-4 pull-right">
+							<button style='border:none;background:transparent;color:black;' ng-disabled='currentPage == 0' class='glyphicon glyphicon-chevron-left' ng-click='currentPage=currentPage-1'></button>
+													  <b>  {{currentPage+1}} / {{numberOfPages()}} </b>
+													  <input type='number' min='1' max='{{maxpage}}' ng-change='checkcurrpage(myValue)' style='width:35%' class="hidden-xs" ng-model='myValue'>
+														<button style='border:none;background:transparent;color:black' class='glyphicon glyphicon-chevron-right' ng-disabled='currentPage >= termsList.length/pageSize - 1' ng-click='currentPage=currentPage+1'></button>
+		</div>
+		
+			<div class="col-md-2 col-xs-4 pull-right"><select class="form-control" ng-model="pageSize" ng-options="obj.value as obj.name for obj in recordsdisplay">
+			<option value="" selected disabled>Record to display</option>
+		</select>
+		</div>
+	</div>
+	
+			<div class="loader"></div>
+			  <!-- Modal -->
+	<div class="modal fade" id="ModalPopup" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<!-- <h4 class="modal-title">Terms & Conditions</h4> -->
+				</div>
+				<div class="modal-body">
+					<form name="teramsdetals">
+						<div class="form-group">
+							<label for="name">Name:</label>
+							<input type="text" class="form-control" id="name" placeholder="Name" ng-model="termsNConditions[0].name">
+						</div>
+						<div class="form-group">
+							<label for="name" >Description: &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-plus-sign text-success" style="cursor:pointer;" ng-click="AddNewRow()"></span></label>
+								<ul>
+									<li class="row mt-0" ng-repeat="obj in termsNConditions[0].description">
+										<label for="disabledInput" class="col-sm-1 control-label" style="cursor:pointer;">
+											<span class="glyphicon glyphicon-minus-sign text-danger" ng-click="RemoveRow($index)"></span>
+										</label>
+										<div class="col-sm-11">
+										  <textarea class="form-control" placeholder="Description Point" ng-model="obj.point"></textarea>
+										</div>
+									</li>
+								</ul>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-12">
+								<label for="name">Approval:</label>
+							</div>
+							<div class="col-sm-2"> 
+								<div class="radio">
+								  <label><input type="radio" name="optradio" ng-model="termsNConditions[0].approval" ng-value="1" ng-click="termsNConditions[0].approval = 1">Yes</label>
+								</div>
+							</div>
+							<div class="col-sm-2"> 
+								<div class="radio">
+								  <label><input type="radio" name="optradio" ng-model="termsNConditions[0].approval" ng-value="0" ng-click="termsNConditions[0].approval = 0">No</label>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer mt-5">
+					<button type="button" class="btn btn-primary" ng-click="SaveTermsDetails()" data-dismiss="modal">Submit</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+			
+		<div class="row mt-1">
+		<div class="table-responsive" ng-init="ListTermsNCondtions()">
+			<table class="table table-bordered table-striped">
+				<thead>
+					<th>#</th>
+					<th>Name</th>
+					<th>Approval</th>
+					<th>Created By</th>
+					<th>Action</th>
+				</thead>
+				<tbody>
+					<tr ng-repeat="data in termsList | filter:search.values | startFrom:currentPage*pageSize | limitTo:pageSize">
+						<td>{{$index +1}}</td>
+						<td>{{data.name}}</td>
+						<td><span ng-if="data.approval === 1">Approved</span><span ng-if="data.approval === 0">Not Approved</span></td>
+						<td>{{data.createdby}}</td>
+						<td class="text-center"><button class="btn btn-warning" ng-click="getTermsDetails(data._id)" data-toggle="modal" data-target="#ModalPopup">Edit</button> | <button class="btn btn-danger" ng-click="DeleteTermCondition(data._id)">Delete</button></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		</div>
+</div>

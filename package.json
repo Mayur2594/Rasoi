@@ -1,0 +1,37 @@
+{
+  "name": "cs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mayur2594/CS.git"
+  },
+  "author": "Mayur Mhatre",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mayur2594/CS/issues"
+  },
+  "homepage": "https://github.com/Mayur2594/CS#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "bower": "^1.8.4",
+    "cookie-parser": "^1.4.3",
+    "crypto": "^1.0.1",
+    "express": "^4.16.3",
+    "grunt": "^1.0.3",
+    "grunt-cli": "^1.3.1",
+    "jsonwebtoken": "^8.3.0",
+    "mongoose": "^5.2.9",
+    "mongoose-joins": "0.0.1",
+    "morgan": "^1.9.0",
+    "multer": "^1.3.1",
+    "mysql-orm": "0.0.8",
+    "puretext": "^0.1.3",
+    "request": "^2.88.0",
+    "shortid": "^2.2.13"
+  }
+}
