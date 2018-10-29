@@ -1,5 +1,9 @@
 angular.module('CSApp')
-.controller('MastersController',function ($scope,$http,$route,$location,$window) {
+.controller('MastersController',['$scope','$http','$route','$location','$window', 'Upload',function ($scope,$http,$route,$location,$window,Upload) {
+	
+	
+	 M.AutoInit();
+	 
 	
 	/* TEARMS AND CONDITIONS--- */
 	
@@ -150,242 +154,15 @@ angular.module('CSApp')
 	}
 	
 	
-	/* ---TEARMS AND CONDITIONS*/
+
 	
-	/* AREA DETAILS--- */
-		
-		$scope.ListAreas = function()
-		{
-			$http({
-              method: 'GET'
-              , url: '/api/ListAreas/'
-              , dataType: 'jsonp'
-			}).then(function (response) {
-			$scope.areasList = response.data;
-			console.log($scope.areasList)
-			$(".loader").fadeOut("slow");
-			$scope.pagination($scope.areasList);
-		});
-		};
-		
-		
-		$scope.getAreaDetails = function(areaid)
-		{
-			$http({
-              method: 'GET'
-              , url: '/api/getAreaDetails/'+areaid
-              , dataType: 'jsonp'
-			}).then(function (response) {
-			$scope.areaDetails = response.data;
-		});
-		};
-			
-			$scope.DeleteArea = function(areaid)
-			{
-				var yes = confirm('Are yuo sure? \n Record will never get you back after delete it')
-						if(yes)
-						{
-							$http({
-								  method: 'DELETE'
-								  , url: '/api/DeleteArea/'+areaid
-								  , dataType: 'jsonp'
-								}).then(function (response) {
-								alert(response.data.message);
-								$scope.ListAreas();
-							});
-						}
-			};
-		
-		
-		$scope.SaveAreaDetails = function()
-		{
-			$http({
-			method  : 'POST',
-			url     : '/api/SaveAreaDetails/',
-			data    : $scope.areaDetails[0] ,
-			headers : {'Content-Type': 'application/json'} 
-			}).then(function(response) {
-			alert(response.data.message);
-			$scope.areaDetails =[];
-			$scope.ListAreas();
-		});
-		};
-		
-		
-	/* ---AREA DETAILS */
+
 	
 	
-	/* GROUP DETAILS--- */
-		
-		$scope.ListGroups = function()
-		{
-			$http({
-              method: 'GET'
-              , url: '/api/ListGroups/'
-              , dataType: 'jsonp'
-			}).then(function (response) {
-			$scope.groupsList = response.data;
-			$(".loader").fadeOut("slow");
-			$scope.pagination($scope.groupsList);
-		});
-		};
-		
-		
-		$scope.getGroupDetails = function(groupid)
-		{
-			$http({
-              method: 'GET'
-              , url: '/api/getGroupDetails/'+groupid
-              , dataType: 'jsonp'
-			}).then(function (response) {
-			$scope.groupDetails = response.data;
-			console.log($scope.groupDetails)
-		});
-		};
-			
-			$scope.DeleteGroup = function(groupid)
-			{
-				var yes = confirm('Are yuo sure? \n Record will never get you back after delete it')
-						if(yes)
-						{
-							$http({
-								  method: 'DELETE'
-								  , url: '/api/DeleteGroup/'+groupid
-								  , dataType: 'jsonp'
-								}).then(function (response) {
-								alert(response.data.message);
-								$scope.ListGroups();
-							});
-						}
-			};
-		
-		
-		$scope.SavegroupDetails = function()
-		{
-			$http({
-			method  : 'POST',
-			url     : '/api/SavegroupDetails/',
-			data    : $scope.groupDetails[0] ,
-			headers : {'Content-Type': 'application/json'} 
-			}).then(function(response) {
-			alert(response.data.message);
-			$scope.groupDetails =[];
-			$scope.ListGroups();
-		});
-		};
-		
-		
-	/* ---GROUP DETAILS */
+
 	
 	
-	
-	/* EVENTS DETAILS--- */
-		
-		$scope.ListEvents = function()
-		{
-			$http({
-              method: 'GET'
-              , url: '/api/ListEvents/'
-              , dataType: 'jsonp'
-			}).then(function (response) {
-			$scope.eventsList = response.data;
-			$(".loader").fadeOut("slow");
-			$scope.pagination($scope.eventsList);
-		});
-		};
-		
-		
-		$scope.getEventDetails = function(eventid)
-		{
-			$http({
-              method: 'GET'
-              , url: '/api/getEventDetails/'+eventid
-              , dataType: 'jsonp'
-			}).then(function (response) {
-			$scope.eventsDetails = response.data;
-			$scope.eventsDetails[0].startdate = new Date($scope.eventsDetails[0].startdate);
-			$scope.eventsDetails[0].enddate = new Date($scope.eventsDetails[0].enddate);
-			
-		});
-		};
-			
-			$scope.DeleteEvent = function(eventid)
-			{
-				var yes = confirm('Are yuo sure? \n Record will never get you back after delete it')
-						if(yes)
-						{
-							$http({
-								  method: 'DELETE'
-								  , url: '/api/DeleteEvent/'+eventid
-								  , dataType: 'jsonp'
-								}).then(function (response) {
-								alert(response.data.message);
-								$scope.ListEvents();
-							});
-						}
-			};
-		
-		
-		$scope.SaveEventsDetails = function()
-		{
-			$http({
-			method  : 'POST',
-			url     : '/api/SaveEventsDetails/',
-			data    : $scope.eventsDetails[0] ,
-			headers : {'Content-Type': 'application/json'} 
-			}).then(function(response) {
-			alert(response.data.message);
-			$scope.eventsDetails =[];
-			$scope.ListEvents();
-		});
-		};
-		
-		
-	/* ---EVENTS DETAILS */
-	
-	/* REFERANCE FUNCTION---- */
-		
-		$scope.ListBranchs = function()
-		{
-			$http({
-              method: 'GET'
-              , url: '/api/ListBranchsforReferance/'
-              , dataType: 'jsonp'
-			}).then(function (response) {
-			$scope.branchList = response.data;
-		});
-		};
-		
-		$scope.ListAreasOnBranch = function(branchid)
-		{
-			$http({
-              method: 'GET'
-              , url: '/api/ListAreasOnBranch/'+branchid
-              , dataType: 'jsonp'
-			}).then(function (response) {
-			$scope.ListOfAreas = response.data;
-		});
-		};
-		
-		
-		$scope.ListGroupsOnArea = function(areaid)
-		{
-			if($scope.eventsDetails)
-			$scope.eventsDetails[0].group = null;
-		
-			$http({
-              method: 'GET'
-              , url: '/api/ListGroupsOnArea/'+areaid
-              , dataType: 'jsonp'
-			}).then(function (response) {
-			$scope.ListOfGroups = response.data;
-		});
-		};
-	
-	/* ----REFERANCE FUNCTION */
-	
-	
-});
+}]);
 	
 	
 	

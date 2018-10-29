@@ -1,6 +1,20 @@
 angular.module('CSApp')
-.controller('LoginController',function ($scope,$http,$route,$location,$window,$timeout) {
+.controller('LoginController',['$scope','$http','$route','$location','$window','$timeout', 'Upload',function ($scope,$http,$route,$location,$window,$timeout,Upload) {
 	
+	
+	
+	 M.AutoInit();
+	 
+	 var instance = M.Carousel.init({
+		indicators: true
+	});
+	
+	autoplay()   
+	function autoplay() {
+		$('.carousel').carousel('next');
+		setTimeout(autoplay, 4500);
+	}
+	 
 	
   $timeout( function(){
             $scope.test1 = "Hello World!";
@@ -24,15 +38,18 @@ angular.module('CSApp')
 	
 	$scope.showHidePassword = function(elemid)
   {
+		var elm = document.getElementById("togglcls");
 		var passwordfield = document.getElementById(elemid);
 		if (passwordfield.type === "password") {
 			passwordfield.type = "text";
+			elm.innerHTML = "visibility_off";
 		}
 		else {
 			passwordfield.type = "password";
+			elm.innerHTML = "visibility";
 		}
-		var elm = document.getElementById("togglcls");
-		elm.classList.toggle("glyphicon-eye-close");
+		
+		
 		
   };
   
@@ -44,7 +61,7 @@ angular.module('CSApp')
 	};
 	
 	$scope.authUser = function()
-	{				
+	{				console.log($scope.userDetails )
 			$http({
 			method  : 'POST',
 			url     : '/api/authUser',
@@ -144,80 +161,154 @@ angular.module('CSApp')
 		});
 		};
 		
+		$(document).ready(function(){
+			$('select').formSelect();
+		});
+		
+		$scope.usersdetails = [{password:'321',
+	firstname:'',
+	lastname:'',
+	mobile:'',
+	email:'',
+	role:''}];
+	
+	$scope.userlevels = ['Superadmin','Admin','Staff'];
+		
+		
+		$scope.AddNewUser = function()
+		{
+			var sorted_arr = $scope.usersdetails.slice().sort();
+			var count = 0; 
+			for (var i = 0; i < sorted_arr.length - 1; i++) {
+				if (sorted_arr[i + 1].mobile === sorted_arr[i].mobile) {
+					count = count +1;
+					alert(sorted_arr[i + 1].mobile + 'is duplicate or blank please correct it');
+				}
+				if (sorted_arr[i + 1].email === sorted_arr[i].email) {
+					count = count +1;
+					alert(sorted_arr[i + 1].email + 'is duplicate  or blank please correct it');
+				}
+			}
+			if(count == 0)
+			{
+				$scope.usersdetails.push({password:'321',firstname:'',lastname:'',mobile:'',email:'',role:''});
+			}
+		};
+		
+		$scope.RemoveUser = function(indx)
+		{
+			$scope.usersdetails.map(function(value,index)
+			{
+				if(indx === index)
+				{
+					$scope.usersdetails.splice(indx,1);
+				}
+			})
+		}
+		
+		
+		
+		$scope.clear = function () {
+		angular.element("input[type='file']").val(null);
+		document.getElementById("imgpanel").src = '';
+	};
+	
+	
+	
+			
+		
+		$scope.PassFileValue = function () {
+		
+			var selectedfile = angular.element("input[type='file']")[0].files;
+
+		$('imgbtn').css("display", "block");
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#imgpanel')
+                    .attr('src', e.target.result);
+            };
+            reader.readAsDataURL(selectedfile[0]);
+	}; 
+		
+		$scope.companydetails ={address:[{lat:'',lan:'',address:''}]};
+		
+		$scope.getCurrentLoaction = function()
+		{
+			var options = {
+                enableHighAccuracy: true
+            };
+
+			navigator.geolocation.getCurrentPosition(function(pos) {
+                $scope.position = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+                console.log(JSON.stringify($scope.position));   
+				var geocoder = new google.maps.Geocoder;
+				
+						var latlng = {lat: pos.coords.latitude, lng: pos.coords.longitude};
+						geocoder.geocode({'location':  $scope.position}, function(results, status) {
+						  if (status === 'OK') {
+							if (results[0]) {
+								document.getElementById('address').focus();
+								$scope.companydetails.address[0].lat = latlng.lat;
+								$scope.companydetails.address[0].lan = latlng.lng;
+								$scope.companydetails.address[0].address = results[0].formatted_address;
+	
+							} else {
+							  window.alert('No results found');
+							}
+						  } else {
+							window.alert('Geocoder failed due to: ' + status);
+						  }
+						});
+					  
+				
+				
+				
+				
+            }, 
+            function(error) {                    
+                alert('Unable to get location: ' + error.message);
+            }, options);
+		};
+		
+		
+		$scope.SubmitNewCompany = function()
+	{
+		
+		$scope.companydetails.users = $scope.usersdetails;
+		
+		 if ($scope.newcompany.file.$valid && $scope.file) {
+			 var passeddata = {file: $scope.file, companydetails:$scope.companydetails}
+		 }
+		 else
+		 {
+			  var passeddata = {companydetails:$scope.companydetails}
+		 }
+		 
+		 console.log(passeddata);
+         Upload.upload({
+            url: '/api/SubmitNewCompany',
+            data: passeddata
+        }).then(function (resp) {
+            //alert('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+			alert(resp.data.message);
+            //alert('Record inserted successfully');
+			$scope.RedirectToForm('/Login');
+        }, function (resp) {
+            //alert('Error status: ' + resp.status);
+            alert('Something went wrong, Please try again!');
+        }, function (evt) {
+            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+           // console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+        });  
+	};
+		
+	
+		
+		
 		
 		/* -------------- */
-		
-		$scope.postdata = function()
-		{
-			/*  $http({
-			method  : 'POST',
-			url     : 'http://www.cvlkra.com/PanInquiry.asmx/GetPanStatus',
-			data    : {panNo:'CCWPM0948K',userName:'ONWEEQ',PosCode:'1200003103',password:'79ZOguioApEZ4Js5GlYeSg%3d%3d',PassKey:'m'} ,
-			headers : {'Content-Type': 'application/json'} 
-		}).then(function(response) {
-			console.log(response);
-		}) */
-		
-		
-		 var config = {
-                headers : {
-                    'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
-                }
-            }
-
-           /*  $http.post('http://www.cvlkra.com/PanInquiry.asmx/GetPanStatus', [{panNo:'CCWPM0948K',userName:'ONWEEQ',PosCode:'1200003103',password:'79ZOguioApEZ4Js5GlYeSg%3d%3d',PassKey:'m'}] , config)
-            .success(function (data, status, headers, config) {
-                $scope.ServerResponse = data;
-				console.log($scope.ServerResponse )
-				console.log(headers)
-				console.log(status)
-            })
-            .error(function (data, status, header, config) {
-                $scope.ServerResponse = "Data: " + data +
-                    "<hr />status: " + status +
-                    "<hr />headers: " + header +
-                    "<hr />config: " + config;
-            }); */
-
-		function init() {
-        FB.api(
-				"/286631768727930/events",
-				function (response) {
-					console.log(response);
-				  if (response && !response.error) {
-					/* handle the result */
-				  }
-				}
-			);
-    }
-
-     window.fbAsyncInit = function() {
-    FB.init({
-      appId            : '320101055206376',
-      autoLogAppEvents : true,
-      xfbml            : true,
-      version          : 'v3.1'
-    });
-	init()
-  };
-
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "https://connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-		
-		
-		
-		
-		};
-		$scope.postdata();
-		
-	
-	
-}).directive('customAutofocus', function() {
+}]).directive('customAutofocus', function() {
   return{
          restrict: 'A',
 

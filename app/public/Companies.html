@@ -1,0 +1,40 @@
+<div class="container-fluid">
+
+	<div class="row" ng-init="getCompaniesDetails()">
+		<div class="table-responsive-vertical shadow-z-1">
+		<table class="table table-hover table-bordered">
+			<thead>
+				<th>#</th>
+				<th>Name</th>
+				<th>Owner</th>
+				<th>Mobile</th>
+				<th>Users</th>
+				<th></th>
+			</thead>
+			<tbody>
+				<tr ng-repeat="data in companyesList">
+					<td>{{$index +1}}</td>
+					<td class="left-align">{{data.firmname}}</td>
+					<td class="left-align">{{data.ownerdetails.firstname}} {{data.ownerdetails.midname}} {{data.ownerdetails.lastname}}</td>
+					<td class="center-align">{{data.contactdetails.mobile1}}</td>
+					<td class="left-align">{{data.users.length}}</td>
+					<td class="center-align"><button ng-click="getCompanyData(data._id)" data-target="ViewCompany" class="waves-effect waves-light btn modal-trigger">View</button></td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+		<!-- Modal Structure -->
+			  <div id="ViewCompany" class="modal">
+				<div class="modal-content">
+				  <h4>{{companyesDetails[0].firmname}}</h4>
+				  <div id="map" style="height: 200px;background-color:red;"></div>
+  
+				</div>
+				<div class="modal-footer">
+				  <a class="modal-close waves-effect waves-green btn-flat">Close</a>
+				</div>
+			  </div>
+					  
+	</div>
+
+</div>
